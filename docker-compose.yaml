@@ -1,0 +1,343 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+      MONGO_INITDB_DATABASE: beunreal
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - beunreal-network
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')", "-u", "root", "-p", "rootpassword", "--authenticationDatabase", "admin" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+      - zookeeper_logs:/var/lib/zookeeper/log
+    networks:
+      - beunreal-network
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - beunreal-network
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+  kafka-init:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-init
+    depends_on:
+      kafka:
+        condition: service_healthy
+    command: >
+      bash -c "
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic user-events --partitions 3 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic auth-events --partitions 3 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic message-events --partitions 3 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic media-events --partitions 3 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic discovery-events --partitions 3 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic notification-events --partitions 3 --replication-factor 1 &&
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic location-events --partitions 3 --replication-factor 1
+      "
+    networks:
+      - beunreal-network
+
+  akhq:
+    image: tchiotludo/akhq:latest
+    container_name: akhq
+    depends_on:
+      kafka:
+        condition: service_started
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            docker-kafka-server:
+              properties:
+                bootstrap.servers: "kafka:9092"
+        micronaut:
+          security:
+            enabled: true
+            authentication: bearer
+            token:
+              jwt:
+                signatures:
+                  secret:
+                    generator:
+                      secret: "beunrealSecureJwtSecret2025"
+            endpoints:
+              login:
+                path: "/login"
+        akhq.security.basic-auth:
+          - username: admin
+            password: admin
+            groups:
+              - admin
+        akhq.security.groups:
+          admin:
+            name: Admin
+            roles:
+              - topic/read
+              - topic/insert
+              - topic/delete
+              - topic/config/update
+              - registry/read
+              - registry/insert
+              - registry/update
+              - registry/delete
+              - connect/read
+              - connect/insert
+              - connect/update
+              - connect/delete
+    ports:
+      - "8082:8080"
+    networks:
+      - beunreal-network
+
+  nginx-lb:
+    image: nginx:latest
+    container_name: nginx-lb
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - beunreal-api-gateway-1
+      - beunreal-api-gateway-2
+    networks:
+      - beunreal-network
+
+  beunreal-api-gateway-1:
+    build: ./beunreal-api-gateway
+    container_name: beunreal-api-gateway-1
+    restart: always
+    ports:
+      - "8090"
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - ALLOWED_ORIGINS=http://localhost
+      - MONGO_URI=mongodb://root:rootpassword@mongodb:27017/beunreal?authSource=admin
+      - MONGO_DATABASE=beunreal
+      - JWT_SECRET_KEY=YRMCKrygcXtx1bVpEMcBKIK9LxX8aDUTUQy2XyuLRCbnoPOhxUeIPqIQW01UfC6QgEKETKf2rM9UQnc4FkRSxA
+      - SERVER_PORT=8090
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - beunreal-network
+
+  beunreal-api-gateway-2:
+    build: ./beunreal-api-gateway
+    container_name: beunreal-api-gateway-2
+    restart: always
+    ports:
+      - "8090"
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - ALLOWED_ORIGINS=http://localhost
+      - MONGO_URI=mongodb://root:rootpassword@mongodb:27017/beunreal?authSource=admin
+      - MONGO_DATABASE=beunreal
+      - JWT_SECRET_KEY=YRMCKrygcXtx1bVpEMcBKIK9LxX8aDUTUQy2XyuLRCbnoPOhxUeIPqIQW01UfC6QgEKETKf2rM9UQnc4FkRSxA
+      - SERVER_PORT=8090
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - beunreal-network
+
+  beunreal-auth-service:
+    build: ./beunreal-auth-service
+    container_name: beunreal-auth-service
+    restart: always
+    ports:
+      - "8091:8091"
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - MONGO_URI=mongodb://root:rootpassword@mongodb:27017/beunreal?authSource=admin
+      - MONGO_DATABASE=beunreal
+      - JWT_SECRET_KEY=YRMCKrygcXtx1bVpEMcBKIK9LxX8aDUTUQy2XyuLRCbnoPOhxUeIPqIQW01UfC6QgEKETKf2rM9UQnc4FkRSxA
+      - SERVER_PORT=8091
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - beunreal-network
+
+  beunreal-user-service:
+    build: ./beunreal-user-service
+    container_name: beunreal-user-service
+    restart: always
+    ports:
+      - "8092:8092"
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - MONGO_URI=mongodb://root:rootpassword@mongodb:27017/beunreal?authSource=admin
+      - MONGO_DATABASE=beunreal
+      - SERVER_PORT=8092
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - beunreal-network
+
+  beunreal-message-service:
+    build: ./beunreal-message-service
+    container_name: beunreal-message-service
+    restart: always
+    ports:
+      - "8093:8093"
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - MONGO_URI=mongodb://root:rootpassword@mongodb:27017/beunreal?authSource=admin
+      - MONGO_DATABASE=beunreal
+      - SERVER_PORT=8093
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - beunreal-network
+
+  beunreal-media-service:
+    build: ./beunreal-media-service
+    container_name: beunreal-media-service
+    restart: always
+    ports:
+      - "8094:8094"
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - MONGO_URI=mongodb://root:rootpassword@mongodb:27017/beunreal?authSource=admin
+      - MONGO_DATABASE=beunreal
+      - SERVER_PORT=8094
+      - STORAGE_LOCATION=/app/media
+    volumes:
+      - media_storage:/app/media
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - beunreal-network
+
+  beunreal-discovery-service:
+    build: ./beunreal-discovery-service
+    container_name: beunreal-discovery-service
+    restart: always
+    ports:
+      - "8095:8095"
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - MONGO_URI=mongodb://root:rootpassword@mongodb:27017/beunreal?authSource=admin
+      - MONGO_DATABASE=beunreal
+      - SERVER_PORT=8095
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - beunreal-network
+
+  beunreal-notification-service:
+    build: ./beunreal-notification-service
+    container_name: beunreal-notification-service
+    restart: always
+    ports:
+      - "8096:8096"
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - MONGO_URI=mongodb://root:rootpassword@mongodb:27017/beunreal?authSource=admin
+      - MONGO_DATABASE=beunreal
+      - SERVER_PORT=8096
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - beunreal-network
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: rootpassword
+      ME_CONFIG_MONGODB_URL: mongodb://root:rootpassword@mongodb:27017/?authSource=admin
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: pass
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - beunreal-network
+
+networks:
+  beunreal-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  zookeeper_data:
+  zookeeper_logs:
+  kafka_data:
+  media_storage:
