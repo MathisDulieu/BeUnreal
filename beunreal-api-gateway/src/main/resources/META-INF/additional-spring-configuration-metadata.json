@@ -11,11 +11,6 @@
       "description": "Description for beunreal.properties.mongo-database."
     },
     {
-      "name": "beunreal.properties.database-name",
-      "type": "java.lang.String",
-      "description": "Description for beunreal.properties.database-name."
-    },
-    {
       "name": "beunreal.properties.jwt-secret-key",
       "type": "java.lang.String",
       "description": "Description for beunreal.properties.jwt-secret-key."
@@ -24,6 +19,11 @@
       "name": "beunreal.properties.spring-kafka-bootstrap-servers",
       "type": "java.lang.String",
       "description": "Description for beunreal.properties.spring-kafka-bootstrap-servers."
+    },
+    {
+      "name": "beunreal.properties.mongo-uri",
+      "type": "java.lang.String",
+      "description": "Description for beunreal.properties.mongo-uri."
     }
   ]
 }

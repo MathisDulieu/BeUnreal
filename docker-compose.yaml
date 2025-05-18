@@ -139,7 +139,7 @@ services:
       - "8082:8080"
     networks:
       - beunreal-network
-
+  
   nginx-lb:
     image: nginx:latest
     container_name: nginx-lb

@@ -18,12 +18,12 @@ public class MongoConfiguration {
 
     @Bean
     public MongoClient mongoClient() {
-        return MongoClients.create(envConfiguration.getMongoDatabase());
+        return MongoClients.create(envConfiguration.getMongoUri());
     }
 
     @Bean
     public MongoTemplate mongoTemplate() {
-        return new MongoTemplate(new SimpleMongoClientDatabaseFactory(mongoClient(), envConfiguration.getDatabaseName()));
+        return new MongoTemplate(new SimpleMongoClientDatabaseFactory(mongoClient(), envConfiguration.getMongoDatabase()));
     }
 
 }

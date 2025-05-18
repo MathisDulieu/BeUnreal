@@ -6,6 +6,7 @@ import com.supinfo.beunreal_api_gateway.model.user.request.UpdateAuthenticatedUs
 import com.supinfo.beunreal_api_gateway.model.user.request.UpdateGroupRequest;
 import com.supinfo.beunreal_api_gateway.model.user.response.*;
 import com.supinfo.beunreal_api_gateway.service.UserService;
+import com.supinfo.beunreal_api_gateway.swagger.UserControllerDoc;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

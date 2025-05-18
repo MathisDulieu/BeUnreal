@@ -6,6 +6,7 @@ import com.supinfo.beunreal_api_gateway.model.media.request.ShareMediaToUserRequ
 import com.supinfo.beunreal_api_gateway.model.media.request.UploadMediaRequest;
 import com.supinfo.beunreal_api_gateway.model.media.response.GetMediaResponse;
 import com.supinfo.beunreal_api_gateway.service.MediaService;
+import com.supinfo.beunreal_api_gateway.swagger.MediaControllerDoc;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

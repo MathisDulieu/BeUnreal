@@ -100,10 +100,6 @@ public class UserService {
         return null;
     }
 
-    public ResponseEntity<String> updateUserLocation(User authenticatedUser, UpdateUserLocationRequest request) {
-        return null;
-    }
-
     public ResponseEntity<String> cancelFriendRequest(User authenticatedUser, String requestId) {
         return null;
     }

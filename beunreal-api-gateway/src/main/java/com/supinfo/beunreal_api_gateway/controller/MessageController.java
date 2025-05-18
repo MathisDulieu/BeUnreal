@@ -7,6 +7,7 @@ import com.supinfo.beunreal_api_gateway.model.message.request.UpdateMessageReque
 import com.supinfo.beunreal_api_gateway.model.message.response.GetGroupConversationResponse;
 import com.supinfo.beunreal_api_gateway.model.message.response.GetPrivateConversationResponse;
 import com.supinfo.beunreal_api_gateway.service.MessageService;
+import com.supinfo.beunreal_api_gateway.swagger.MessageControllerDoc;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

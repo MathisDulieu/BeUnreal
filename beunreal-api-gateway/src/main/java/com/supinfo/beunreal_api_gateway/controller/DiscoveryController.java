@@ -5,6 +5,7 @@ import com.supinfo.beunreal_api_gateway.model.discovery.request.PostStoryRequest
 import com.supinfo.beunreal_api_gateway.model.discovery.response.GetNearbyDiscoveriesResponse;
 import com.supinfo.beunreal_api_gateway.model.discovery.response.GetStoryResponse;
 import com.supinfo.beunreal_api_gateway.service.DiscoveryService;
+import com.supinfo.beunreal_api_gateway.swagger.DiscoveryControllerDoc;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

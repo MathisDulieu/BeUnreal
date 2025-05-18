@@ -13,7 +13,7 @@ public class UserDao {
 
     private final MongoTemplate mongoTemplate;
 
-    private static final String USER_COLLECTION = "USERS";
+    private static final String USER_COLLECTION = "users";
 
     public Optional<User> findById(String userId) {
         return Optional.ofNullable(mongoTemplate.findById(userId, User.class, USER_COLLECTION));

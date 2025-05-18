@@ -33,7 +33,6 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin(envConfiguration.getAllowedOrigins());
-        configuration.addAllowedOrigin("https://supmap-admin.up.railway.app/");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
@@ -51,8 +50,7 @@ public class SecurityConfiguration {
                 .securityMatcher("/private/**", "/protected/**")
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/private/admin/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
-                        .requestMatchers("/protected/**").hasAuthority("SUPER_ADMIN")
+                        .requestMatchers("/private/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/private/**").authenticated()
                         .anyRequest().permitAll()
                 )
