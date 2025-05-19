@@ -161,7 +161,7 @@ services:
       - "8090"
     environment:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - ALLOWED_ORIGINS=http://localhost
+      - ALLOWED_ORIGINS=*
       - MONGO_URI=mongodb://root:rootpassword@mongodb:27017/beunreal?authSource=admin
       - MONGO_DATABASE=beunreal
       - JWT_SECRET_KEY=YRMCKrygcXtx1bVpEMcBKIK9LxX8aDUTUQy2XyuLRCbnoPOhxUeIPqIQW01UfC6QgEKETKf2rM9UQnc4FkRSxA
@@ -182,7 +182,7 @@ services:
       - "8090"
     environment:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - ALLOWED_ORIGINS=http://localhost
+      - ALLOWED_ORIGINS=*
       - MONGO_URI=mongodb://root:rootpassword@mongodb:27017/beunreal?authSource=admin
       - MONGO_DATABASE=beunreal
       - JWT_SECRET_KEY=YRMCKrygcXtx1bVpEMcBKIK9LxX8aDUTUQy2XyuLRCbnoPOhxUeIPqIQW01UfC6QgEKETKf2rM9UQnc4FkRSxA
@@ -286,25 +286,6 @@ services:
       - MONGO_URI=mongodb://root:rootpassword@mongodb:27017/beunreal?authSource=admin
       - MONGO_DATABASE=beunreal
       - SERVER_PORT=8095
-    depends_on:
-      mongodb:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
-    networks:
-      - beunreal-network
-
-  beunreal-notification-service:
-    build: ./beunreal-notification-service
-    container_name: beunreal-notification-service
-    restart: always
-    ports:
-      - "8096:8096"
-    environment:
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - MONGO_URI=mongodb://root:rootpassword@mongodb:27017/beunreal?authSource=admin
-      - MONGO_DATABASE=beunreal
-      - SERVER_PORT=8096
     depends_on:
       mongodb:
         condition: service_healthy
