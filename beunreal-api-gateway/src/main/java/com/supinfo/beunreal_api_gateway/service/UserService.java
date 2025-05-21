@@ -42,7 +42,7 @@ public class UserService {
     private final GroupDao groupDao;
 
     public ResponseEntity<GetUserInfoResponse> getUserInfo(User authenticatedUser, String userId) {
-        String targetUserId = (userId == null) ? authenticatedUser.getId() : userId;
+        String targetUserId = (isNull(userId)) ? authenticatedUser.getId() : userId;
 
         if (!hasPermissionToViewUser(authenticatedUser, targetUserId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -50,7 +50,7 @@ public class UserService {
 
         User targetUser = retrieveTargetUser(authenticatedUser, targetUserId);
 
-        if (targetUser == null) {
+        if (isNull(targetUser)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
@@ -266,9 +266,7 @@ public class UserService {
         request.setUpdatedAt(LocalDateTime.now());
 
         Map<String, String> kafkaRequest = Map.of(
-                "requestId", requestId,
-                "senderId", request.getSenderId(),
-                "recipientId", request.getRecipientId()
+                "requestId", requestId
         );
 
         KafkaMessage kafkaMessage = producer.buildKafkaMessage(authenticatedUser, httpRequest, kafkaRequest);
@@ -298,9 +296,7 @@ public class UserService {
         request.setUpdatedAt(LocalDateTime.now());
 
         Map<String, String> kafkaRequest = Map.of(
-                "requestId", requestId,
-                "senderId", request.getSenderId(),
-                "recipientId", request.getRecipientId()
+                "requestId", requestId
         );
 
         KafkaMessage kafkaMessage = producer.buildKafkaMessage(authenticatedUser, httpRequest, kafkaRequest);
@@ -373,6 +369,7 @@ public class UserService {
         }
 
         Map<String, String> kafkaRequest = Map.of(
+                "groupId", groupId,
                 "name", request.getName(),
                 "picture", request.getGroupPicture()
         );
@@ -394,7 +391,11 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not authorized to delete this group");
         }
 
-        KafkaMessage kafkaMessage = producer.buildKafkaMessage(authenticatedUser, httpRequest, null);
+        Map<String, String> kafkaRequest = Map.of(
+                "groupId", groupId
+        );
+
+        KafkaMessage kafkaMessage = producer.buildKafkaMessage(authenticatedUser, httpRequest, kafkaRequest);
 
         producer.send(kafkaMessage, "user-events", "deleteGroup");
 
@@ -780,6 +781,32 @@ public class UserService {
         producer.send(kafkaMessage, "user-events", "cancelFriendRequest");
 
         return ResponseEntity.status(HttpStatus.OK).body("Friend request canceled successfully");
+    }
+
+    public ResponseEntity<GetUserGroupsResponse> getUserGroups(User authenticatedUser) {
+        List<Group> userGroups = groupDao.findGroupsByMemberId(authenticatedUser.getId());
+
+        if (userGroups.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    GetUserGroupsResponse.builder()
+                            .groups(Collections.emptyList())
+                            .build()
+            );
+        }
+
+        List<GroupsResponse> groups = userGroups.stream()
+                .map(group -> GroupsResponse.builder()
+                        .id(group.getId())
+                        .name(group.getName())
+                        .groupPicture(group.getGroupPicture())
+                        .build())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                GetUserGroupsResponse.builder()
+                        .groups(groups)
+                        .build()
+        );
     }
 
     private boolean hasPermissionToViewUser(User authenticatedUser, String userId) {

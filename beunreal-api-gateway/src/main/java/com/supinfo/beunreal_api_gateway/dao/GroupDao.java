@@ -50,6 +50,9 @@ public class GroupDao {
         return mongoTemplate.find(query, Group.class, GROUP_COLLECTION);
     }
 
-
+    public List<Group> findGroupsByMemberId(String userId) {
+        Query query = new Query(Criteria.where("memberIds").in(userId));
+        return mongoTemplate.find(query, Group.class, GROUP_COLLECTION);
+    }
 
 }

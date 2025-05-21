@@ -25,5 +25,6 @@ public class UserControllerDoc {
     public @interface RejectGroupInvitationDoc {}
     public @interface AcceptGroupInvitationDoc {}
     public @interface CancelGroupInvitationDoc {}
+    public @interface GetUserGroupsDoc {}
 
 }

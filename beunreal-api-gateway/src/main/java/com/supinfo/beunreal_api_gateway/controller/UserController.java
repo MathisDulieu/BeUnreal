@@ -241,4 +241,12 @@ public class UserController {
         return userService.cancelGroupInvitation(authenticatedUser, groupId, invitationId, httpRequest);
     }
 
+    @GetMapping("/private/user/groups")
+    @UserControllerDoc.GetUserGroupsDoc
+    public ResponseEntity<GetUserGroupsResponse> getUserGroups(
+            @AuthenticationPrincipal User authenticatedUser
+    ) {
+        return userService.getUserGroups(authenticatedUser);
+    }
+
 }
