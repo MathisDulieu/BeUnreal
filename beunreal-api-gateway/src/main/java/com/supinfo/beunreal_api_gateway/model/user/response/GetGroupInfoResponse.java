@@ -19,7 +19,7 @@ public class GetGroupInfoResponse {
     private FriendResponse creator;
     private String groupPicture;
     private List<FriendResponse> members;
-    private List<FriendResponse> adminIds;
+    private List<FriendResponse> admins;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

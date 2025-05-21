@@ -230,15 +230,15 @@ public class UserController {
         return userService.acceptGroupInvitation(authenticatedUser, groupId, httpRequest);
     }
 
-    @PutMapping("/private/group/{groupId}/invitation/{userId}/cancel")
+    @PutMapping("/private/group/{groupId}/invitation/{invitationId}/cancel")
     @UserControllerDoc.CancelGroupInvitationDoc
     public ResponseEntity<String> cancelGroupInvitation(
             @PathVariable String groupId,
-            @PathVariable String userId,
+            @PathVariable String invitationId,
             @AuthenticationPrincipal User authenticatedUser,
             HttpServletRequest httpRequest
     ) {
-        return userService.cancelGroupInvitation(authenticatedUser, groupId, userId, httpRequest);
+        return userService.cancelGroupInvitation(authenticatedUser, groupId, invitationId, httpRequest);
     }
 
 }

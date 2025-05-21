@@ -38,8 +38,7 @@ public class SwaggerConfiguration {
                 .addTagsItem(new Tag().name("User").description("Endpoints for managing user profiles, searching for users, and handling friend relationships"))
                 .addTagsItem(new Tag().name("Discovery").description("Endpoints for location-based services, finding nearby users, and discovering content based on geolocation"))
                 .addTagsItem(new Tag().name("Media").description("Endpoints for uploading, downloading, and sharing photos and short videos between users"))
-                .addTagsItem(new Tag().name("Message").description("Endpoints for direct and group messaging, message history, and real-time communication"))
-                .addTagsItem(new Tag().name("Notification").description("Endpoints for managing user notifications, preferences, and delivery settings"));
+                .addTagsItem(new Tag().name("Message").description("Endpoints for direct and group messaging, message history, and real-time communication"));
     }
 
     @Bean

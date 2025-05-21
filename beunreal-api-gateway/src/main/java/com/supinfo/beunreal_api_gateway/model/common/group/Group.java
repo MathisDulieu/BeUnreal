@@ -8,7 +8,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -25,10 +27,10 @@ public class Group {
     private String groupPicture;
 
     @Builder.Default
-    private Set<String> memberIds = new HashSet<>();
+    private List<String> memberIds = new ArrayList<>();
 
     @Builder.Default
-    private Set<String> adminIds = new HashSet<>();
+    private List<String> adminIds = new ArrayList<>();
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
