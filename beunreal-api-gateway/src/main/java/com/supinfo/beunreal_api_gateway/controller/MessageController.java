@@ -19,7 +19,7 @@ public class MessageController {
 
     private final MessageService messageService;
 
-    @PostMapping("/messages/private/{userId}")
+    @PostMapping("/private/messages/private/{userId}")
     @MessageControllerDoc.SendPrivateMessageDoc
     public ResponseEntity<String> sendPrivateMessage(
             @RequestBody SendPrivateMessageRequest request,
@@ -29,7 +29,7 @@ public class MessageController {
         return messageService.sendPrivateMessage(authenticatedUser, userId, request);
     }
 
-    @GetMapping("/messages/private/{userId}")
+    @GetMapping("/private/messages/private/{userId}")
     @MessageControllerDoc.GetPrivateConversationDoc
     public ResponseEntity<GetPrivateConversationResponse> getPrivateConversation(
             @PathVariable String userId,
@@ -38,7 +38,7 @@ public class MessageController {
         return messageService.getPrivateConversation(authenticatedUser, userId);
     }
 
-    @PostMapping("/messages/group/{groupId}")
+    @PostMapping("/private/messages/group/{groupId}")
     @MessageControllerDoc.SendGroupMessageDoc
     public ResponseEntity<String> sendGroupMessage(
             @RequestBody SendGroupMessageRequest request,
@@ -48,7 +48,7 @@ public class MessageController {
         return messageService.sendGroupMessage(authenticatedUser, groupId, request);
     }
 
-    @GetMapping("/messages/group/{groupId}")
+    @GetMapping("/private/messages/group/{groupId}")
     @MessageControllerDoc.GetGroupConversationDoc
     public ResponseEntity<GetGroupConversationResponse> getGroupConversation(
             @PathVariable String groupId,
@@ -57,7 +57,7 @@ public class MessageController {
         return messageService.getGroupConversation(authenticatedUser, groupId);
     }
 
-    @PutMapping("/messages/{messageId}")
+    @PutMapping("/private/messages/{messageId}")
     @MessageControllerDoc.UpdateMessageDoc
     public ResponseEntity<String> updateMessage(
             @RequestBody UpdateMessageRequest request,
@@ -67,7 +67,7 @@ public class MessageController {
         return messageService.updateMessage(authenticatedUser, messageId, request);
     }
 
-    @DeleteMapping("/messages/{messageId}")
+    @DeleteMapping("/private/messages/{messageId}")
     @MessageControllerDoc.DeleteMessageDoc
     public ResponseEntity<String> deleteMessage(
             @PathVariable String messageId,

@@ -19,7 +19,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/private/user/{userId}")
     @UserControllerDoc.GetUserInfoDoc
     public ResponseEntity<GetUserInfoResponse> getUserInfo(
             @PathVariable String userId,
@@ -28,7 +28,7 @@ public class UserController {
         return userService.getUserInfo(authenticatedUser, userId);
     }
 
-    @PutMapping("/user")
+    @PutMapping("/private/user")
     @UserControllerDoc.UpdateAuthenticatedUserInfoDoc
     public ResponseEntity<String> updateAuthenticatedUserInfo(
             @RequestBody UpdateAuthenticatedUserInfoRequest request,
@@ -38,7 +38,7 @@ public class UserController {
         return userService.updateAuthenticatedUserInfo(authenticatedUser, request, httpRequest);
     }
 
-    @DeleteMapping("/user")
+    @DeleteMapping("/private/user")
     @UserControllerDoc.DeleteAuthenticatedUserDoc
     public ResponseEntity<String> deleteAuthenticatedUser(
             @AuthenticationPrincipal User authenticatedUser,
@@ -47,7 +47,7 @@ public class UserController {
         return userService.deleteAuthenticatedUserInfo(authenticatedUser, httpRequest);
     }
 
-    @GetMapping("/users/search/{prefix}")
+    @GetMapping("/private/users/search/{prefix}")
     @UserControllerDoc.SearchUsersDoc
     public ResponseEntity<SearchUsersResponse> searchUsers(
             @PathVariable String prefix,
@@ -56,7 +56,7 @@ public class UserController {
         return userService.searchUsers(authenticatedUser, prefix);
     }
 
-    @PostMapping("/users/add/{friendId}")
+    @PostMapping("/private/users/add/{friendId}")
     @UserControllerDoc.AddFriendDoc
     public ResponseEntity<String> addFriend(
             @PathVariable String friendId,
@@ -66,7 +66,7 @@ public class UserController {
         return userService.addFriend(authenticatedUser, friendId, httpRequest);
     }
 
-    @DeleteMapping("/users/friends/{friendId}")
+    @DeleteMapping("/private/users/friends/{friendId}")
     @UserControllerDoc.DeleteFriendDoc
     public ResponseEntity<String> deleteFriend(
             @PathVariable String friendId,
@@ -76,7 +76,7 @@ public class UserController {
         return userService.deleteFriend(authenticatedUser, friendId, httpRequest);
     }
 
-    @GetMapping("/users/friends/requests/sent")
+    @GetMapping("/private/users/friends/requests/sent")
     @UserControllerDoc.GetSentFriendsRequestsDoc
     public ResponseEntity<GetSentFriendsRequestsResponse> getSentFriendsRequests(
             @AuthenticationPrincipal User authenticatedUser
@@ -84,7 +84,7 @@ public class UserController {
         return userService.getSentFriendsRequests(authenticatedUser);
     }
 
-    @GetMapping("/users/friends/requests/received")
+    @GetMapping("/private/users/friends/requests/received")
     @UserControllerDoc.GetReceivedFriendsRequestsDoc
     public ResponseEntity<GetReceivedFriendsRequestsResponse> getReceivedFriendsRequests(
             @AuthenticationPrincipal User authenticatedUser
@@ -92,7 +92,7 @@ public class UserController {
         return userService.getReceivedFriendsRequests(authenticatedUser);
     }
 
-    @PutMapping("/users/friends/requests/{requestId}/accept")
+    @PutMapping("/private/users/friends/requests/{requestId}/accept")
     @UserControllerDoc.AcceptFriendRequestDoc
     public ResponseEntity<String> acceptFriendRequest(
             @PathVariable String requestId,
@@ -102,7 +102,7 @@ public class UserController {
         return userService.acceptFriendRequest(authenticatedUser, requestId, httpRequest);
     }
 
-    @PutMapping("/users/friends/requests/{requestId}/reject")
+    @PutMapping("/private/users/friends/requests/{requestId}/reject")
     @UserControllerDoc.RejectFriendRequestDoc
     public ResponseEntity<String> rejectFriendRequest(
             @PathVariable String requestId,
@@ -112,7 +112,7 @@ public class UserController {
         return userService.rejectFriendRequest(authenticatedUser, requestId, httpRequest);
     }
 
-    @PutMapping("/users/friends/requests/{requestId}/cancel")
+    @PutMapping("/private/users/friends/requests/{requestId}/cancel")
     @UserControllerDoc.CancelFriendRequestDoc
     public ResponseEntity<String> cancelFriendRequest(
             @PathVariable String requestId,
@@ -122,7 +122,7 @@ public class UserController {
         return userService.cancelFriendRequest(authenticatedUser, requestId, httpRequest);
     }
 
-    @GetMapping("/users/friends/{prefix}")
+    @GetMapping("/private/users/friends/{prefix}")
     @UserControllerDoc.GetFriendsDoc
     public ResponseEntity<GetFriendsResponse> getFriends(
             @PathVariable String prefix,
@@ -131,7 +131,7 @@ public class UserController {
         return userService.getFriends(authenticatedUser, prefix);
     }
 
-    @PostMapping("/group")
+    @PostMapping("/private/group")
     @UserControllerDoc.CreateGroupDoc
     public ResponseEntity<String> createGroup(
             @RequestBody CreateGroupRequest request,
@@ -141,7 +141,7 @@ public class UserController {
         return userService.createGroup(authenticatedUser, request, httpRequest);
     }
 
-    @PutMapping("/group/{groupId}")
+    @PutMapping("/private/group/{groupId}")
     @UserControllerDoc.UpdateGroupDoc
     public ResponseEntity<String> updateGroup(
             @PathVariable String groupId,
@@ -152,7 +152,7 @@ public class UserController {
         return userService.updateGroup(authenticatedUser, groupId, request, httpRequest);
     }
 
-    @DeleteMapping("/group/{groupId}")
+    @DeleteMapping("/private/group/{groupId}")
     @UserControllerDoc.DeleteGroupDoc
     public ResponseEntity<String> deleteGroup(
             @PathVariable String groupId,
@@ -162,7 +162,7 @@ public class UserController {
         return userService.deleteGroup(authenticatedUser, groupId, httpRequest);
     }
 
-    @GetMapping("/group/{groupId}")
+    @GetMapping("/private/group/{groupId}")
     @UserControllerDoc.GetGroupInfoDoc
     public ResponseEntity<GetGroupInfoResponse> getGroupInfo(
             @PathVariable String groupId,
@@ -171,7 +171,7 @@ public class UserController {
         return userService.getGroupInfo(authenticatedUser, groupId);
     }
 
-    @PutMapping("/group/{groupId}/members/remove/{userId}")
+    @PutMapping("/private/group/{groupId}/members/remove/{userId}")
     @UserControllerDoc.RemoveUserFromGroupDoc
     public ResponseEntity<String> removeUserFromGroup(
             @PathVariable String groupId,
@@ -182,7 +182,7 @@ public class UserController {
         return userService.removeUserFromGroup(authenticatedUser, groupId, userId, httpRequest);
     }
 
-    @PutMapping("/group/{groupId}/members/add/{userId}")
+    @PutMapping("/private/group/{groupId}/members/add/{userId}")
     @UserControllerDoc.AddUserToGroupDoc
     public ResponseEntity<String> addUserToGroup(
             @PathVariable String groupId,
@@ -193,7 +193,7 @@ public class UserController {
         return userService.addUserToGroup(authenticatedUser, groupId, userId, httpRequest);
     }
 
-    @GetMapping("/group/{groupId}/invitations")
+    @GetMapping("/private/group/{groupId}/invitations")
     @UserControllerDoc.GetGroupInvitationsDoc
     public ResponseEntity<GetGroupInvitationsResponse> getGroupInvitations(
             @PathVariable String groupId,
@@ -202,7 +202,7 @@ public class UserController {
         return userService.getGroupInvitations(authenticatedUser, groupId);
     }
 
-    @GetMapping("/user/group/invitations")
+    @GetMapping("/private/user/group/invitations")
     @UserControllerDoc.GetUserGroupInvitationsDoc
     public ResponseEntity<GetUserGroupInvitationsResponse> getUserGroupInvitations(
             @AuthenticationPrincipal User authenticatedUser
@@ -210,7 +210,7 @@ public class UserController {
         return userService.getUserGroupInvitations(authenticatedUser);
     }
 
-    @PutMapping("/group/{groupId}/invitation/reject")
+    @PutMapping("/private/group/{groupId}/invitation/reject")
     @UserControllerDoc.RejectGroupInvitationDoc
     public ResponseEntity<String> rejectGroupInvitation(
             @PathVariable String groupId,
@@ -220,7 +220,7 @@ public class UserController {
         return userService.rejectGroupInvitation(authenticatedUser, groupId, httpRequest);
     }
 
-    @PutMapping("/group/{groupId}/invitation/accept")
+    @PutMapping("/private/group/{groupId}/invitation/accept")
     @UserControllerDoc.AcceptGroupInvitationDoc
     public ResponseEntity<String> acceptGroupInvitation(
             @PathVariable String groupId,
@@ -230,7 +230,7 @@ public class UserController {
         return userService.acceptGroupInvitation(authenticatedUser, groupId, httpRequest);
     }
 
-    @PutMapping("/group/{groupId}/invitation/{userId}/cancel")
+    @PutMapping("/private/group/{groupId}/invitation/{userId}/cancel")
     @UserControllerDoc.CancelGroupInvitationDoc
     public ResponseEntity<String> cancelGroupInvitation(
             @PathVariable String groupId,

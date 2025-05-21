@@ -2,9 +2,11 @@ package com.supinfo.beunreal_api_gateway.service;
 
 import com.supinfo.beunreal_api_gateway.Producer;
 import com.supinfo.beunreal_api_gateway.dao.FriendRequestDao;
+import com.supinfo.beunreal_api_gateway.dao.GroupDao;
 import com.supinfo.beunreal_api_gateway.dao.UserDao;
 import com.supinfo.beunreal_api_gateway.model.common.friendRequest.FriendRequest;
 import com.supinfo.beunreal_api_gateway.model.common.friendRequest.FriendRequestStatus;
+import com.supinfo.beunreal_api_gateway.model.common.group.Group;
 import com.supinfo.beunreal_api_gateway.model.common.kafka.KafkaMessage;
 import com.supinfo.beunreal_api_gateway.model.common.user.User;
 import com.supinfo.beunreal_api_gateway.model.common.user.UserRole;
@@ -27,6 +29,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.isNull;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -35,6 +39,7 @@ public class UserService {
     private final Producer producer;
     private final UserUtils userUtils;
     private final FriendRequestDao friendRequestDao;
+    private final GroupDao groupDao;
 
     public ResponseEntity<GetUserInfoResponse> getUserInfo(User authenticatedUser, String userId) {
         String targetUserId = (userId == null) ? authenticatedUser.getId() : userId;
@@ -333,11 +338,50 @@ public class UserService {
     }
 
     public ResponseEntity<String> createGroup(User authenticatedUser, CreateGroupRequest request, HttpServletRequest httpRequest) {
-        return null;
+        String error = userUtils.validateGroupInfos(request.getName(), request.getGroupPicture());
+
+        if (!isNull(error)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+
+        Map<String, String> kafkaRequest = Map.of(
+                "name", request.getName(),
+                "picture", request.getGroupPicture()
+        );
+
+        KafkaMessage kafkaMessage = producer.buildKafkaMessage(authenticatedUser, httpRequest, kafkaRequest);
+
+        producer.send(kafkaMessage, "user-events", "createGroup");
+
+        return ResponseEntity.status(HttpStatus.OK).body("Group created successfully!");
     }
 
     public ResponseEntity<String> updateGroup(User authenticatedUser, String groupId, UpdateGroupRequest request, HttpServletRequest httpRequest) {
-        return null;
+        Optional<Group> retrievedGroup = groupDao.findById(groupId);
+        if (retrievedGroup.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Group not found");
+        }
+
+        if (!retrievedGroup.get().getAdminIds().contains(authenticatedUser.getId())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not authorized to update this group");
+        }
+
+        String error = userUtils.validateNewGroupInfos(request.getName(), request.getGroupPicture());
+
+        if (!isNull(error)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+
+        Map<String, String> kafkaRequest = Map.of(
+                "name", request.getName(),
+                "picture", request.getGroupPicture()
+        );
+
+        KafkaMessage kafkaMessage = producer.buildKafkaMessage(authenticatedUser, httpRequest, kafkaRequest);
+
+        producer.send(kafkaMessage, "user-events", "updateGroup");
+
+        return ResponseEntity.status(HttpStatus.OK).body("Group created successfully!");
     }
 
     public ResponseEntity<String> deleteGroup(User authenticatedUser, String groupId, HttpServletRequest httpRequest) {

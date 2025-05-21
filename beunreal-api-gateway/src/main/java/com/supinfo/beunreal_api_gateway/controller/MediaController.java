@@ -19,7 +19,7 @@ public class MediaController {
 
     private final MediaService mediaService;
 
-    @PostMapping("/media/{mediaId}/share/{groupId}")
+    @PostMapping("/private/media/{mediaId}/share/{groupId}")
     @MediaControllerDoc.ShareMediaToGroupDoc
     public ResponseEntity<String> shareMediaToGroup(
             @RequestBody ShareMediaToGroupRequest request,
@@ -30,7 +30,7 @@ public class MediaController {
         return mediaService.shareMediaToGroup(authenticatedUser, request, mediaId, groupId);
     }
 
-    @PostMapping("/media/{mediaId}/share/{userId}")
+    @PostMapping("/private/media/{mediaId}/share/{userId}")
     @MediaControllerDoc.ShareMediaToUserDoc
     public ResponseEntity<String> shareMediaToUser(
             @RequestBody ShareMediaToUserRequest request,
@@ -41,7 +41,7 @@ public class MediaController {
         return mediaService.shareMediaToUser(authenticatedUser, request, mediaId, userId);
     }
 
-    @PostMapping("/messages/media")
+    @PostMapping("/private/messages/media")
     @MediaControllerDoc.GetMediaUrlDoc
     public ResponseEntity<String> getMediaUrl(
             @RequestParam("file") MultipartFile file,

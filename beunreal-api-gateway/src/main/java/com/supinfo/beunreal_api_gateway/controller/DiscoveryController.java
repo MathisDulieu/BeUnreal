@@ -17,7 +17,7 @@ public class DiscoveryController {
 
     private final DiscoveryService discoveryService;
 
-    @GetMapping("/discovery/users/nearby?lat={latitude}&lon={longitude}")
+    @GetMapping("/private/discovery/users/nearby?lat={latitude}&lon={longitude}")
     @DiscoveryControllerDoc.GetNearbyDiscoveriesDoc
     public ResponseEntity<GetNearbyDiscoveriesResponse> getNearbyDiscoveries(
             @PathVariable String latitude,
@@ -27,7 +27,7 @@ public class DiscoveryController {
         return discoveryService.getNearbyDiscoveries(authenticatedUser, latitude, longitude);
     }
 
-    @PostMapping("/discovery/stories")
+    @PostMapping("/private/discovery/stories")
     @DiscoveryControllerDoc.PostStoryDoc
     public ResponseEntity<String> postStory(
             @RequestBody PostStoryRequest request,
@@ -36,7 +36,7 @@ public class DiscoveryController {
         return discoveryService.postStory(authenticatedUser, request);
     }
 
-    @GetMapping("/discovery/stories/{storyId}")
+    @GetMapping("/private/discovery/stories/{storyId}")
     @DiscoveryControllerDoc.GetStoryDoc
     public ResponseEntity<GetStoryResponse> getStory(
             @PathVariable String storyId,
@@ -45,7 +45,7 @@ public class DiscoveryController {
         return discoveryService.getStory(authenticatedUser, storyId);
     }
 
-    @DeleteMapping("/discovery/stories/{storyId}")
+    @DeleteMapping("/private/discovery/stories/{storyId}")
     @DiscoveryControllerDoc.DeleteStoryDoc
     public ResponseEntity<String> deleteStory(
             @PathVariable String storyId,

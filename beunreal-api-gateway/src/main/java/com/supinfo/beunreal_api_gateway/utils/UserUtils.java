@@ -120,4 +120,68 @@ public class UserUtils {
         }
     }
 
+    public String validateGroupInfos(String name, String groupPicture) {
+        String error;
+        error = validateGroupName(name);
+        error = error + " " + validateGroupPicture(groupPicture);
+
+        return error;
+    }
+
+    public String validateNewGroupInfos(String name, String groupPicture) {
+        String error = null;
+        if (isNull(name) && isNull(groupPicture)) {
+            return "At least one field (name or group picture) must be provided";
+        }
+
+        if (!isNull(groupPicture)) {
+            error = validateGroupPicture(groupPicture);
+        }
+
+        if (!isNull(name)) {
+            error = error + " " + validateGroupName(name);
+        }
+
+        return error;
+    }
+
+    private String validateGroupName(String groupName) {
+        if (groupName == null || groupName.trim().isEmpty()) {
+            return "Group name cannot be empty";
+        }
+
+        if (groupName.length() < 3) {
+            return "Group name must be at least 3 characters long";
+        }
+
+        if (groupName.length() > 20) {
+            return "Group name cannot exceed 20 characters";
+        }
+
+        return null;
+    }
+
+    private String validateGroupPicture(String groupPicture) {
+        if (groupPicture == null || groupPicture.trim().isEmpty()) {
+            return "Group picture URL cannot be empty";
+        }
+
+        if (!groupPicture.startsWith("https://")) {
+            return "Group picture URL must start with 'https://'";
+        }
+
+        String lowercaseUrl = groupPicture.toLowerCase();
+        boolean isValidImageFormat = lowercaseUrl.endsWith(".jpg") ||
+                lowercaseUrl.endsWith(".jpeg") ||
+                lowercaseUrl.endsWith(".png") ||
+                lowercaseUrl.endsWith(".gif") ||
+                lowercaseUrl.endsWith(".webp") ||
+                lowercaseUrl.endsWith(".svg");
+
+        if (!isValidImageFormat) {
+            return "Group picture must be a valid image format (jpg, jpeg, png, gif, webp, or svg)";
+        }
+
+        return null;
+    }
 }
