@@ -23,7 +23,4 @@ public class DiscoveryService {
         return null;
     }
 
-    public ResponseEntity<String> deleteStory(User authenticatedUser, String storyId) {
-        return null;
-    }
 }

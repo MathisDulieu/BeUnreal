@@ -8,6 +8,7 @@ import com.supinfo.beunreal_api_gateway.model.message.response.GetGroupConversat
 import com.supinfo.beunreal_api_gateway.model.message.response.GetPrivateConversationResponse;
 import com.supinfo.beunreal_api_gateway.service.MessageService;
 import com.supinfo.beunreal_api_gateway.swagger.MessageControllerDoc;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,9 +25,10 @@ public class MessageController {
     public ResponseEntity<String> sendPrivateMessage(
             @RequestBody SendPrivateMessageRequest request,
             @PathVariable String userId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return messageService.sendPrivateMessage(authenticatedUser, userId, request);
+        return messageService.sendPrivateMessage(authenticatedUser, userId, request, httpRequest);
     }
 
     @GetMapping("/private/messages/private/{userId}")
@@ -43,9 +45,10 @@ public class MessageController {
     public ResponseEntity<String> sendGroupMessage(
             @RequestBody SendGroupMessageRequest request,
             @PathVariable String groupId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return messageService.sendGroupMessage(authenticatedUser, groupId, request);
+        return messageService.sendGroupMessage(authenticatedUser, groupId, request, httpRequest);
     }
 
     @GetMapping("/private/messages/group/{groupId}")
@@ -57,23 +60,5 @@ public class MessageController {
         return messageService.getGroupConversation(authenticatedUser, groupId);
     }
 
-    @PutMapping("/private/messages/{messageId}")
-    @MessageControllerDoc.UpdateMessageDoc
-    public ResponseEntity<String> updateMessage(
-            @RequestBody UpdateMessageRequest request,
-            @PathVariable String messageId,
-            @AuthenticationPrincipal User authenticatedUser
-    ) {
-        return messageService.updateMessage(authenticatedUser, messageId, request);
-    }
-
-    @DeleteMapping("/private/messages/{messageId}")
-    @MessageControllerDoc.DeleteMessageDoc
-    public ResponseEntity<String> deleteMessage(
-            @PathVariable String messageId,
-            @AuthenticationPrincipal User authenticatedUser
-    ) {
-        return messageService.deleteMessage(authenticatedUser, messageId);
-    }
 
 }

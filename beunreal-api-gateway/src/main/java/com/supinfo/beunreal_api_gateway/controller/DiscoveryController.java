@@ -45,13 +45,4 @@ public class DiscoveryController {
         return discoveryService.getStory(authenticatedUser, storyId);
     }
 
-    @DeleteMapping("/private/discovery/stories/{storyId}")
-    @DiscoveryControllerDoc.DeleteStoryDoc
-    public ResponseEntity<String> deleteStory(
-            @PathVariable String storyId,
-            @AuthenticationPrincipal User authenticatedUser
-    ) {
-        return discoveryService.deleteStory(authenticatedUser, storyId);
-    }
-
 }

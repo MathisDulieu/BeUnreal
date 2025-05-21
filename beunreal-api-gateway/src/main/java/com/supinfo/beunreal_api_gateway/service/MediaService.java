@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class MediaService {
+
     public ResponseEntity<String> uploadMedia(User authenticatedUser, UploadMediaRequest request) {
         return null;
     }
@@ -36,4 +37,5 @@ public class MediaService {
     public ResponseEntity<String> getMediaUrl(User authenticatedUser, MultipartFile file) {
         return null;
     }
+
 }

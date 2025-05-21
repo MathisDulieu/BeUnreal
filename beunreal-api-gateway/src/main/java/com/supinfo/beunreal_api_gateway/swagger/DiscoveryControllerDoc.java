@@ -5,6 +5,5 @@ public class DiscoveryControllerDoc {
     public @interface GetNearbyDiscoveriesDoc {}
     public @interface PostStoryDoc {}
     public @interface GetStoryDoc {}
-    public @interface DeleteStoryDoc {}
 
 }
