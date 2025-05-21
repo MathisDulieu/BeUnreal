@@ -1,13 +1,39 @@
 package com.supinfo.beunreal_auth_service;
 
+import com.supinfo.beunreal_auth_service.configuration.DateConfiguration;
+import com.supinfo.beunreal_auth_service.configuration.EnvConfiguration;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
-@SpringBootApplication
+import java.util.TimeZone;
+
+@Slf4j
+@SpringBootApplication(scanBasePackages = "com.supinfo.beunreal_auth_service")
+@EnableConfigurationProperties(EnvConfiguration.class)
 public class BeunrealAuthServiceApplication {
+
+	private final DateConfiguration dateConfiguration = new DateConfiguration();
 
 	public static void main(String[] args) {
 		SpringApplication.run(BeunrealAuthServiceApplication.class, args);
+	}
+
+	@PostConstruct
+	void setLocalTimeZone() {
+		TimeZone.setDefault(TimeZone.getTimeZone("Europe/Paris"));
+		log.info("Auth Service running in Paris timezone, started at: {}", dateConfiguration.newDate());
+	}
+
+	@Configuration
+	@Profile("test")
+	@ComponentScan(lazyInit = true)
+	static class ConfigForShorterBootTimeForTests {
 	}
 
 }

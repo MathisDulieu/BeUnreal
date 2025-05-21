@@ -206,6 +206,7 @@ services:
       - MONGO_DATABASE=beunreal
       - JWT_SECRET_KEY=YRMCKrygcXtx1bVpEMcBKIK9LxX8aDUTUQy2XyuLRCbnoPOhxUeIPqIQW01UfC6QgEKETKf2rM9UQnc4FkRSxA
       - SERVER_PORT=8091
+      - DEFAULT_PROFILE_IMAGE=https://i.ibb.co/6c9s9DKf/default-Profile-Image.jpg
     depends_on:
       mongodb:
         condition: service_healthy

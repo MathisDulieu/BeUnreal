@@ -31,10 +31,9 @@ public class AuthenticationController {
     @PostMapping("/login")
     @AuthenticationControllerDoc.LoginDoc
     public ResponseEntity<String> login(
-            @RequestBody LoginRequest request,
-            HttpServletRequest httpRequest
+            @RequestBody LoginRequest request
     ) {
-        return authenticationService.login(request, httpRequest);
+        return authenticationService.login(request);
     }
 
 }

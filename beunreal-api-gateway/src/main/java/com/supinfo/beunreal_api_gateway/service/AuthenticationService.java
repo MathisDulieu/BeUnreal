@@ -48,7 +48,7 @@ public class AuthenticationService {
         return ResponseEntity.status(HttpStatus.OK).body("Registration successful! You can now log in to your account.");
     }
 
-    public ResponseEntity<String> login(LoginRequest request, HttpServletRequest httpRequest) {
+    public ResponseEntity<String> login(LoginRequest request) {
         Optional<User> optionalUser = userDao.findByEmail(request.getEmail());
         if (optionalUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found. Please check your email address or register for a new account.");
@@ -57,15 +57,6 @@ public class AuthenticationService {
         if (!passwordEncoder.matches(request.getPassword(), optionalUser.get().getPassword())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid password. Please try again.");
         }
-
-        Map<String, String> kafkaRequest = Map.of(
-                "email", request.getEmail(),
-                "userId", optionalUser.get().getId()
-        );
-
-        KafkaMessage kafkaMessage = producer.buildKafkaMessage(null, httpRequest, kafkaRequest);
-
-        producer.send(kafkaMessage, "auth-events", "login");
 
         return ResponseEntity.status(HttpStatus.OK).body(jwtTokenService.generateToken(optionalUser.get().getId()));
     }
