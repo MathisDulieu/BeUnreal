@@ -34,4 +34,12 @@ public class MessageDao {
         return mongoTemplate.find(query, Message.class, MESSAGE_COLLECTION);
     }
 
+    public List<Message> findGroupConversationMessages(String groupId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("groupId").is(groupId));
+        query.with(Sort.by(Sort.Direction.DESC, "sentAt"));
+
+        return mongoTemplate.find(query, Message.class, MESSAGE_COLLECTION);
+    }
+
 }

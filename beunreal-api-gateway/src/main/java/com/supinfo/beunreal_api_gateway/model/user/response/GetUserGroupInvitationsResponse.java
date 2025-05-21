@@ -1,10 +1,8 @@
 package com.supinfo.beunreal_api_gateway.model.user.response;
 
 import com.supinfo.beunreal_api_gateway.model.user.response.model.UserGroupInvitationsResponse;
-import com.supinfo.beunreal_api_gateway.model.user.response.model.UserToSearch;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter

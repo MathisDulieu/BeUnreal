@@ -121,28 +121,49 @@ public class UserUtils {
     }
 
     public String validateGroupInfos(String name, String groupPicture) {
-        String error;
-        error = validateGroupName(name);
-        error = error + " " + validateGroupPicture(groupPicture);
+        StringBuilder errorBuilder = new StringBuilder();
 
-        return error;
+        String nameError = validateGroupName(name);
+        if (nameError != null) {
+            errorBuilder.append(nameError);
+        }
+
+        String pictureError = validateGroupPicture(groupPicture);
+        if (pictureError != null) {
+            if (!errorBuilder.isEmpty()) {
+                errorBuilder.append(". ");
+            }
+            errorBuilder.append(pictureError);
+        }
+
+        return !errorBuilder.isEmpty() ? errorBuilder.toString() : null;
     }
 
     public String validateNewGroupInfos(String name, String groupPicture) {
-        String error = null;
-        if (isNull(name) && isNull(groupPicture)) {
+        if (name == null && groupPicture == null) {
             return "At least one field (name or group picture) must be provided";
         }
 
-        if (!isNull(groupPicture)) {
-            error = validateGroupPicture(groupPicture);
+        StringBuilder errorBuilder = new StringBuilder();
+
+        if (name != null) {
+            String nameError = validateGroupName(name);
+            if (nameError != null) {
+                errorBuilder.append(nameError);
+            }
         }
 
-        if (!isNull(name)) {
-            error = error + " " + validateGroupName(name);
+        if (groupPicture != null) {
+            String pictureError = validateGroupPicture(groupPicture);
+            if (pictureError != null) {
+                if (!errorBuilder.isEmpty()) {
+                    errorBuilder.append(". ");
+                }
+                errorBuilder.append(pictureError);
+            }
         }
 
-        return error;
+        return !errorBuilder.isEmpty() ? errorBuilder.toString() : null;
     }
 
     private String validateGroupName(String groupName) {

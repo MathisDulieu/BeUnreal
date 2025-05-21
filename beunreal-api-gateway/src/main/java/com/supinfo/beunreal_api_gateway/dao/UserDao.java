@@ -1,7 +1,6 @@
 package com.supinfo.beunreal_api_gateway.dao;
 
 import com.supinfo.beunreal_api_gateway.model.common.user.User;
-import com.supinfo.beunreal_api_gateway.model.user.response.GetFriendsResponse;
 import com.supinfo.beunreal_api_gateway.model.user.response.model.FriendResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;

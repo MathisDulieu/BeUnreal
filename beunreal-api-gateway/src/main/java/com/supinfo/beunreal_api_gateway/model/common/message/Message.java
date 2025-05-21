@@ -8,8 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Builder
@@ -24,10 +22,7 @@ public class Message {
     private String recipientId;
     private String groupId;
     private String content;
-
-    @Builder.Default
-    private List<String> mediaIds = new ArrayList<>();
-
+    private String mediaUrl;
     private LocalDateTime sentAt;
     private LocalDateTime deliveredAt;
     private LocalDateTime readAt;

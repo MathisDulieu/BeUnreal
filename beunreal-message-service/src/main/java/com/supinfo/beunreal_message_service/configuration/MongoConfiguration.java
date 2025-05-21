@@ -1,4 +1,4 @@
-package com.supinfo.beunreal_user_service.configuration;
+package com.supinfo.beunreal_message_service.configuration;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;

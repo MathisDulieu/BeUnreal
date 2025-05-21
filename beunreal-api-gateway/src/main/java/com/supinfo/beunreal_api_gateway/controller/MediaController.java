@@ -3,8 +3,6 @@ package com.supinfo.beunreal_api_gateway.controller;
 import com.supinfo.beunreal_api_gateway.model.common.user.User;
 import com.supinfo.beunreal_api_gateway.model.media.request.ShareMediaToGroupRequest;
 import com.supinfo.beunreal_api_gateway.model.media.request.ShareMediaToUserRequest;
-import com.supinfo.beunreal_api_gateway.model.media.request.UploadMediaRequest;
-import com.supinfo.beunreal_api_gateway.model.media.response.GetMediaResponse;
 import com.supinfo.beunreal_api_gateway.service.MediaService;
 import com.supinfo.beunreal_api_gateway.swagger.MediaControllerDoc;
 import lombok.RequiredArgsConstructor;

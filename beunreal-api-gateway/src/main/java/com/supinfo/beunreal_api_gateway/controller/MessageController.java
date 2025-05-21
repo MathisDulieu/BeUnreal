@@ -3,7 +3,6 @@ package com.supinfo.beunreal_api_gateway.controller;
 import com.supinfo.beunreal_api_gateway.model.common.user.User;
 import com.supinfo.beunreal_api_gateway.model.message.request.SendGroupMessageRequest;
 import com.supinfo.beunreal_api_gateway.model.message.request.SendPrivateMessageRequest;
-import com.supinfo.beunreal_api_gateway.model.message.request.UpdateMessageRequest;
 import com.supinfo.beunreal_api_gateway.model.message.response.GetGroupConversationResponse;
 import com.supinfo.beunreal_api_gateway.model.message.response.GetPrivateConversationResponse;
 import com.supinfo.beunreal_api_gateway.service.MessageService;
