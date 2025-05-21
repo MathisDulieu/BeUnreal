@@ -7,6 +7,7 @@ import com.supinfo.beunreal_api_gateway.model.user.request.UpdateGroupRequest;
 import com.supinfo.beunreal_api_gateway.model.user.response.*;
 import com.supinfo.beunreal_api_gateway.service.UserService;
 import com.supinfo.beunreal_api_gateway.swagger.UserControllerDoc;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,29 +20,31 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/user/{userId}")
-    @UserControllerDoc.GetAuthenticatedUserInfoDoc
-    public ResponseEntity<GetAuthenticatedUserInfoResponse> getAuthenticatedUserInfo(
+    @UserControllerDoc.GetUserInfoDoc
+    public ResponseEntity<GetUserInfoResponse> getUserInfo(
             @PathVariable String userId,
             @AuthenticationPrincipal User authenticatedUser
     ) {
-        return userService.getAuthenticatedUserInfo(authenticatedUser, userId);
+        return userService.getUserInfo(authenticatedUser, userId);
     }
 
     @PutMapping("/user")
     @UserControllerDoc.UpdateAuthenticatedUserInfoDoc
     public ResponseEntity<String> updateAuthenticatedUserInfo(
             @RequestBody UpdateAuthenticatedUserInfoRequest request,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.updateAuthenticatedUserInfo(authenticatedUser, request);
+        return userService.updateAuthenticatedUserInfo(authenticatedUser, request, httpRequest);
     }
 
     @DeleteMapping("/user")
     @UserControllerDoc.DeleteAuthenticatedUserDoc
     public ResponseEntity<String> deleteAuthenticatedUser(
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.deleteAuthenticatedUserInfo(authenticatedUser);
+        return userService.deleteAuthenticatedUserInfo(authenticatedUser, httpRequest);
     }
 
     @GetMapping("/users/search/{prefix}")
@@ -57,18 +60,20 @@ public class UserController {
     @UserControllerDoc.AddFriendDoc
     public ResponseEntity<String> addFriend(
             @PathVariable String friendId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.addFriend(authenticatedUser, friendId);
+        return userService.addFriend(authenticatedUser, friendId, httpRequest);
     }
 
     @DeleteMapping("/users/friends/{friendId}")
     @UserControllerDoc.DeleteFriendDoc
     public ResponseEntity<String> deleteFriend(
             @PathVariable String friendId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.deleteFriend(authenticatedUser, friendId);
+        return userService.deleteFriend(authenticatedUser, friendId, httpRequest);
     }
 
     @GetMapping("/users/friends/requests/sent")
@@ -91,27 +96,30 @@ public class UserController {
     @UserControllerDoc.AcceptFriendRequestDoc
     public ResponseEntity<String> acceptFriendRequest(
             @PathVariable String requestId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.acceptFriendRequest(authenticatedUser, requestId);
+        return userService.acceptFriendRequest(authenticatedUser, requestId, httpRequest);
     }
 
     @PutMapping("/users/friends/requests/{requestId}/reject")
     @UserControllerDoc.RejectFriendRequestDoc
     public ResponseEntity<String> rejectFriendRequest(
             @PathVariable String requestId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.rejectFriendRequest(authenticatedUser, requestId);
+        return userService.rejectFriendRequest(authenticatedUser, requestId, httpRequest);
     }
 
     @PutMapping("/users/friends/requests/{requestId}/cancel")
     @UserControllerDoc.CancelFriendRequestDoc
     public ResponseEntity<String> cancelFriendRequest(
             @PathVariable String requestId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.cancelFriendRequest(authenticatedUser, requestId);
+        return userService.cancelFriendRequest(authenticatedUser, requestId, httpRequest);
     }
 
     @GetMapping("/users/friends/{prefix}")
@@ -127,9 +135,10 @@ public class UserController {
     @UserControllerDoc.CreateGroupDoc
     public ResponseEntity<String> createGroup(
             @RequestBody CreateGroupRequest request,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.createGroup(authenticatedUser, request);
+        return userService.createGroup(authenticatedUser, request, httpRequest);
     }
 
     @PutMapping("/group/{groupId}")
@@ -137,18 +146,20 @@ public class UserController {
     public ResponseEntity<String> updateGroup(
             @PathVariable String groupId,
             @RequestBody UpdateGroupRequest request,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.updateGroup(authenticatedUser, groupId, request);
+        return userService.updateGroup(authenticatedUser, groupId, request, httpRequest);
     }
 
     @DeleteMapping("/group/{groupId}")
     @UserControllerDoc.DeleteGroupDoc
     public ResponseEntity<String> deleteGroup(
             @PathVariable String groupId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.deleteGroup(authenticatedUser, groupId);
+        return userService.deleteGroup(authenticatedUser, groupId, httpRequest);
     }
 
     @GetMapping("/group/{groupId}")
@@ -165,9 +176,10 @@ public class UserController {
     public ResponseEntity<String> removeUserFromGroup(
             @PathVariable String groupId,
             @PathVariable String userId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.removeUserFromGroup(authenticatedUser, groupId, userId);
+        return userService.removeUserFromGroup(authenticatedUser, groupId, userId, httpRequest);
     }
 
     @PutMapping("/group/{groupId}/members/add/{userId}")
@@ -175,9 +187,10 @@ public class UserController {
     public ResponseEntity<String> addUserToGroup(
             @PathVariable String groupId,
             @PathVariable String userId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.addUserToGroup(authenticatedUser, groupId, userId);
+        return userService.addUserToGroup(authenticatedUser, groupId, userId, httpRequest);
     }
 
     @GetMapping("/group/{groupId}/invitations")
@@ -201,18 +214,20 @@ public class UserController {
     @UserControllerDoc.RejectGroupInvitationDoc
     public ResponseEntity<String> rejectGroupInvitation(
             @PathVariable String groupId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.rejectGroupInvitation(authenticatedUser, groupId);
+        return userService.rejectGroupInvitation(authenticatedUser, groupId, httpRequest);
     }
 
     @PutMapping("/group/{groupId}/invitation/accept")
     @UserControllerDoc.AcceptGroupInvitationDoc
     public ResponseEntity<String> acceptGroupInvitation(
             @PathVariable String groupId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.acceptGroupInvitation(authenticatedUser, groupId);
+        return userService.acceptGroupInvitation(authenticatedUser, groupId, httpRequest);
     }
 
     @PutMapping("/group/{groupId}/invitation/{userId}/cancel")
@@ -220,9 +235,10 @@ public class UserController {
     public ResponseEntity<String> cancelGroupInvitation(
             @PathVariable String groupId,
             @PathVariable String userId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return userService.cancelGroupInvitation(authenticatedUser, groupId, userId);
+        return userService.cancelGroupInvitation(authenticatedUser, groupId, userId, httpRequest);
     }
 
 }

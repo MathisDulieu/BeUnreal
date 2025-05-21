@@ -13,5 +13,6 @@ public class UserToSearch {
     private String id;
     private String username;
     private String profilePicture;
+    private boolean isFriend;
 
 }

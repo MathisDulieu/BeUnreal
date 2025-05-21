@@ -2,7 +2,7 @@ package com.supinfo.beunreal_api_gateway.swagger;
 
 public class UserControllerDoc {
 
-    public @interface GetAuthenticatedUserInfoDoc {}
+    public @interface GetUserInfoDoc {}
     public @interface UpdateAuthenticatedUserInfoDoc {}
     public @interface DeleteAuthenticatedUserDoc {}
     public @interface SearchUsersDoc {}

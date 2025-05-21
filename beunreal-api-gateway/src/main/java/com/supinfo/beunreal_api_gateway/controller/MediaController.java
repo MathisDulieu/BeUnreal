@@ -19,33 +19,6 @@ public class MediaController {
 
     private final MediaService mediaService;
 
-    @PostMapping("/media/upload")
-    @MediaControllerDoc.UploadMediaDoc
-    public ResponseEntity<String> uploadMedia(
-            @RequestBody UploadMediaRequest request,
-            @AuthenticationPrincipal User authenticatedUser
-    ) {
-        return mediaService.uploadMedia(authenticatedUser, request);
-    }
-
-    @GetMapping("/media/{mediaId}")
-    @MediaControllerDoc.GetMediaDoc
-    public ResponseEntity<GetMediaResponse> getMedia(
-            @PathVariable String mediaId,
-            @AuthenticationPrincipal User authenticatedUser
-    ) {
-        return mediaService.getMedia(authenticatedUser, mediaId);
-    }
-
-    @DeleteMapping("/media/{mediaId}")
-    @MediaControllerDoc.DeleteMediaDoc
-    public ResponseEntity<String> deleteMedia(
-            @PathVariable String mediaId,
-            @AuthenticationPrincipal User authenticatedUser
-    ) {
-        return mediaService.deleteMedia(authenticatedUser, mediaId);
-    }
-
     @PostMapping("/media/{mediaId}/share/{groupId}")
     @MediaControllerDoc.ShareMediaToGroupDoc
     public ResponseEntity<String> shareMediaToGroup(

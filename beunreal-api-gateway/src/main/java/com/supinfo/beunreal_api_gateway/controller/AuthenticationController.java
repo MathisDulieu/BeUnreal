@@ -4,6 +4,7 @@ import com.supinfo.beunreal_api_gateway.model.authentication.LoginRequest;
 import com.supinfo.beunreal_api_gateway.model.authentication.RegisterRequest;
 import com.supinfo.beunreal_api_gateway.service.AuthenticationService;
 import com.supinfo.beunreal_api_gateway.swagger.AuthenticationControllerDoc;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,17 +22,19 @@ public class AuthenticationController {
     @PostMapping("/register")
     @AuthenticationControllerDoc.RegisterDoc
     public ResponseEntity<String> register(
-            @RequestBody RegisterRequest request
+            @RequestBody RegisterRequest request,
+            HttpServletRequest httpRequest
     ) {
-        return authenticationService.register(request);
+        return authenticationService.register(request, httpRequest);
     }
 
     @PostMapping("/login")
     @AuthenticationControllerDoc.LoginDoc
     public ResponseEntity<String> login(
-            @RequestBody LoginRequest request
+            @RequestBody LoginRequest request,
+            HttpServletRequest httpRequest
     ) {
-        return authenticationService.login(request);
+        return authenticationService.login(request, httpRequest);
     }
 
 }

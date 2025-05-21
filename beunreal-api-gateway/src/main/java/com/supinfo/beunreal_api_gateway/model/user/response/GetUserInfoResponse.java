@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class GetAuthenticatedUserInfoResponse {
+public class GetUserInfoResponse {
 
     private String id;
     private String username;

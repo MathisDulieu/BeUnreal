@@ -8,7 +8,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -35,7 +37,7 @@ public class User {
     private UserRole role = UserRole.USER;
 
     @Builder.Default
-    private Set<String> friendIds = new HashSet<>();
+    private List<String> friendIds = new ArrayList<>();
 
     @Builder.Default
     private Set<String> pendingFriendRequestIds = new HashSet<>();
