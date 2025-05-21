@@ -24,6 +24,21 @@
       "name": "beunreal.properties.mongo-uri",
       "type": "java.lang.String",
       "description": "Description for beunreal.properties.mongo-uri."
+    },
+    {
+      "name": "beunreal.properties.cloudinary-api-key",
+      "type": "java.lang.String",
+      "description": "Description for beunreal.properties.cloudinary-api-key."
+    },
+    {
+      "name": "beunreal.properties.cloudinary-cloud-name",
+      "type": "java.lang.String",
+      "description": "Description for beunreal.properties.cloudinary-cloud-name."
+    },
+    {
+      "name": "beunreal.properties.cloudinary-api-secret",
+      "type": "java.lang.String",
+      "description": "Description for beunreal.properties.cloudinary-api-secret."
     }
   ]
 }

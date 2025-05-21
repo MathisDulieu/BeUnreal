@@ -1,10 +1,9 @@
 package com.supinfo.beunreal_api_gateway.controller;
 
 import com.supinfo.beunreal_api_gateway.model.common.user.User;
-import com.supinfo.beunreal_api_gateway.model.media.request.ShareMediaToGroupRequest;
-import com.supinfo.beunreal_api_gateway.model.media.request.ShareMediaToUserRequest;
 import com.supinfo.beunreal_api_gateway.service.MediaService;
 import com.supinfo.beunreal_api_gateway.swagger.MediaControllerDoc;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,32 +19,31 @@ public class MediaController {
     @PostMapping("/private/media/{mediaId}/share/{groupId}")
     @MediaControllerDoc.ShareMediaToGroupDoc
     public ResponseEntity<String> shareMediaToGroup(
-            @RequestBody ShareMediaToGroupRequest request,
             @PathVariable String mediaId,
             @PathVariable String groupId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return mediaService.shareMediaToGroup(authenticatedUser, request, mediaId, groupId);
+        return mediaService.shareMediaToGroup(authenticatedUser, mediaId, groupId, httpRequest);
     }
 
     @PostMapping("/private/media/{mediaId}/share/{userId}")
     @MediaControllerDoc.ShareMediaToUserDoc
     public ResponseEntity<String> shareMediaToUser(
-            @RequestBody ShareMediaToUserRequest request,
             @PathVariable String mediaId,
             @PathVariable String userId,
-            @AuthenticationPrincipal User authenticatedUser
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
     ) {
-        return mediaService.shareMediaToUser(authenticatedUser, request, mediaId, userId);
+        return mediaService.shareMediaToUser(authenticatedUser, mediaId, userId, httpRequest);
     }
 
     @PostMapping("/private/messages/media")
     @MediaControllerDoc.GetMediaUrlDoc
     public ResponseEntity<String> getMediaUrl(
-            @RequestParam("file") MultipartFile file,
-            @AuthenticationPrincipal User authenticatedUser
+            @RequestParam("file") MultipartFile file
     ) {
-        return mediaService.getMediaUrl(authenticatedUser, file);
+        return mediaService.getMediaUrl(file);
     }
 
 }

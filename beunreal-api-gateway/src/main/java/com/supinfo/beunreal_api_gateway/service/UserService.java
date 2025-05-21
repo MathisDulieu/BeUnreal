@@ -42,7 +42,7 @@ public class UserService {
     private final GroupDao groupDao;
 
     public ResponseEntity<GetUserInfoResponse> getUserInfo(User authenticatedUser, String userId) {
-        String targetUserId = (isNull(userId)) ? authenticatedUser.getId() : userId;
+        String targetUserId = "me".equalsIgnoreCase(userId) ? authenticatedUser.getId() : userId;
 
         if (!hasPermissionToViewUser(authenticatedUser, targetUserId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

@@ -164,6 +164,9 @@ services:
       - MONGO_DATABASE=beunreal
       - JWT_SECRET_KEY=YRMCKrygcXtx1bVpEMcBKIK9LxX8aDUTUQy2XyuLRCbnoPOhxUeIPqIQW01UfC6QgEKETKf2rM9UQnc4FkRSxA
       - SERVER_PORT=8090
+      - CLOUDINARY_API_KEY=151747874739858
+      - CLOUDINARY_CLOUD_NAME=dzzq4yrp2
+      - CLOUDINARY_API_SECRET=6e16KhoBGkOwKUIpPlBjBsmSmUk
     depends_on:
       mongodb:
         condition: service_healthy
@@ -185,6 +188,9 @@ services:
       - MONGO_DATABASE=beunreal
       - JWT_SECRET_KEY=YRMCKrygcXtx1bVpEMcBKIK9LxX8aDUTUQy2XyuLRCbnoPOhxUeIPqIQW01UfC6QgEKETKf2rM9UQnc4FkRSxA
       - SERVER_PORT=8090
+      - CLOUDINARY_API_KEY=151747874739858
+      - CLOUDINARY_CLOUD_NAME=dzzq4yrp2
+      - CLOUDINARY_API_SECRET=6e16KhoBGkOwKUIpPlBjBsmSmUk
     depends_on:
       mongodb:
         condition: service_healthy

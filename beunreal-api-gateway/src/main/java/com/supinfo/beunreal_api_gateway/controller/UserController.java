@@ -47,10 +47,10 @@ public class UserController {
         return userService.deleteAuthenticatedUserInfo(authenticatedUser, httpRequest);
     }
 
-    @GetMapping("/private/users/search/{prefix}")
+    @GetMapping("/private/users/search")
     @UserControllerDoc.SearchUsersDoc
     public ResponseEntity<SearchUsersResponse> searchUsers(
-            @PathVariable String prefix,
+            @RequestParam(value = "prefix", required = false) String prefix,
             @AuthenticationPrincipal User authenticatedUser
     ) {
         return userService.searchUsers(authenticatedUser, prefix);
@@ -122,10 +122,10 @@ public class UserController {
         return userService.cancelFriendRequest(authenticatedUser, requestId, httpRequest);
     }
 
-    @GetMapping("/private/users/friends/{prefix}")
+    @GetMapping("/private/users/friends")
     @UserControllerDoc.GetFriendsDoc
     public ResponseEntity<GetFriendsResponse> getFriends(
-            @PathVariable String prefix,
+            @RequestParam(value = "prefix", required = false) String prefix,
             @AuthenticationPrincipal User authenticatedUser
     ) {
         return userService.getFriends(authenticatedUser, prefix);

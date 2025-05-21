@@ -119,24 +119,16 @@ public class GroupService {
         String groupId = request.get("groupId");
         String userId = request.get("userId");
 
-        Optional<Group> group = groupDao.findGroupById(groupId);
-        Optional<User> user = userDao.findById(userId);
+        GroupInvitation groupInvitation = GroupInvitation.builder()
+                .groupId(groupId)
+                .senderId(kafkaMessage.getAuthenticatedUser().getId())
+                .status(GroupInvitationStatus.PENDING)
+                .receiverId(userId)
+                .sentDate(LocalDateTime.now())
+                .build();
 
-        if (group.isEmpty()) {
-            log.warn("Group with id : " + groupId + " does not exist");
-            return;
-        }
+        groupDao.saveGroupInvitation(groupInvitation);
 
-        if (user.isEmpty()) {
-            log.warn("User with id : " + userId + " does not exist");
-            return;
-        }
-
-        List<String> memberIds = group.get().getMemberIds();
-        memberIds.add(userId);
-        group.get().setMemberIds(memberIds);
-
-        groupDao.saveGroup(group.get());
         log.info("User with id : " + userId + " has been added to group with id : " + groupId);
     }
 
