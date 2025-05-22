@@ -1,4 +1,4 @@
-package com.supinfo.beunreal_api_gateway.model.common;
+package com.supinfo.beunreal_media_service.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

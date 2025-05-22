@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "beunreal.properties.mongo-database",
+      "type": "java.lang.String",
+      "description": "Description for beunreal.properties.mongo-database."
+    },
+    {
+      "name": "beunreal.properties.mongo-uri",
+      "type": "java.lang.String",
+      "description": "Description for beunreal.properties.mongo-uri."
+    },
+    {
+      "name": "beunreal.properties.spring-kafka-bootstrap-servers",
+      "type": "java.lang.String",
+      "description": "Description for beunreal.properties.spring-kafka-bootstrap-servers."
+    }
+  ]
+}

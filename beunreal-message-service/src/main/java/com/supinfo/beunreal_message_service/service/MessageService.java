@@ -2,7 +2,6 @@ package com.supinfo.beunreal_message_service.service;
 
 import com.supinfo.beunreal_message_service.UuidProvider;
 import com.supinfo.beunreal_message_service.dao.MessageDao;
-import com.supinfo.beunreal_message_service.dao.UserDao;
 import com.supinfo.beunreal_message_service.model.KafkaMessage;
 import com.supinfo.beunreal_message_service.model.Message;
 import com.supinfo.beunreal_message_service.model.MessageStatus;

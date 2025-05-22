@@ -1,6 +1,5 @@
-package com.supinfo.beunreal_api_gateway.model.common.story;
+package com.supinfo.beunreal_media_service.model;
 
-import com.supinfo.beunreal_api_gateway.model.common.Location;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,15 +13,16 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "stories")
-public class Story {
+@Document(collection = "media")
+public class Media {
 
     @Id
     private String id;
-    private String userId;
-    private String mediaId;
+    private String ownerId;
+    private MediaType type;
+    private String url;
     private Location location;
-    private String caption;
     private LocalDateTime createdAt;
+    private LocalDateTime expiresAt;
 
 }

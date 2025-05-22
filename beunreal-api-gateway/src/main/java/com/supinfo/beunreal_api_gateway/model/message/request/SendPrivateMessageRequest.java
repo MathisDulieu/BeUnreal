@@ -10,6 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SendPrivateMessageRequest {
-    private String userId;
     private String content;
 }

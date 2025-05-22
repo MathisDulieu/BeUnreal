@@ -1,6 +1,6 @@
 package com.supinfo.beunreal_api_gateway.model.discovery.response;
 
-import com.supinfo.beunreal_api_gateway.model.discovery.response.model.StoryResponse;
+import com.supinfo.beunreal_api_gateway.model.discovery.response.model.MediaResponse;
 import lombok.*;
 
 import java.util.List;
@@ -13,6 +13,6 @@ import java.util.List;
 @EqualsAndHashCode
 public class GetNearbyDiscoveriesResponse {
 
-    private List<StoryResponse> stories;
+    private List<MediaResponse> stories;
 
 }

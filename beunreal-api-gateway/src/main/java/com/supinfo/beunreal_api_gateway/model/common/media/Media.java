@@ -22,9 +22,6 @@ public class Media {
     private String ownerId;
     private MediaType type;
     private String url;
-    private String thumbnailUrl;
-    private Integer durationSeconds;
-    private Long sizeBytes;
     private Location location;
     private LocalDateTime createdAt;
     private LocalDateTime expiresAt;

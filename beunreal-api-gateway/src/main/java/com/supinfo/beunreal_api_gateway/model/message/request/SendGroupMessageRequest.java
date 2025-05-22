@@ -10,6 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SendGroupMessageRequest {
-    private String groupId;
     private String content;
 }

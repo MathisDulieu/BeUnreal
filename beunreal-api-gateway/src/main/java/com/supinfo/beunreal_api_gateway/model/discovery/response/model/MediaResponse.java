@@ -12,13 +12,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class StoryResponse {
+public class MediaResponse {
 
     private String id;
     private UserToSearch creator;
     private String mediaUrl;
     private Location location;
-    private String caption;
     private LocalDateTime createdAt;
 
 }

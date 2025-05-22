@@ -10,10 +10,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostStoryRequest {
+public class PostMediaRequest {
 
     private String mediaUrl;
     private Location location;
-    private String caption;
 
 }

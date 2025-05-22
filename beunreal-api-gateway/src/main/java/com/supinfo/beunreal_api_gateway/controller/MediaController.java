@@ -1,6 +1,9 @@
 package com.supinfo.beunreal_api_gateway.controller;
 
 import com.supinfo.beunreal_api_gateway.model.common.user.User;
+import com.supinfo.beunreal_api_gateway.model.discovery.request.PostMediaRequest;
+import com.supinfo.beunreal_api_gateway.model.discovery.response.GetNearbyDiscoveriesResponse;
+import com.supinfo.beunreal_api_gateway.model.media.response.GetMediaResponse;
 import com.supinfo.beunreal_api_gateway.service.MediaService;
 import com.supinfo.beunreal_api_gateway.swagger.MediaControllerDoc;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,6 +47,33 @@ public class MediaController {
             @RequestParam("file") MultipartFile file
     ) {
         return mediaService.getMediaUrl(file);
+    }
+
+    @GetMapping("/private/media/users/nearby?lat={latitude}&lon={longitude}")
+    @MediaControllerDoc.GetNearbyDiscoveriesDoc
+    public ResponseEntity<GetNearbyDiscoveriesResponse> getNearbyDiscoveries(
+            @PathVariable String latitude,
+            @PathVariable String longitude
+    ) {
+        return mediaService.getNearbyDiscoveries(latitude, longitude);
+    }
+
+    @PostMapping("/private/media/stories")
+    @MediaControllerDoc.PostStoryDoc
+    public ResponseEntity<String> postStory(
+            @RequestBody PostMediaRequest request,
+            @AuthenticationPrincipal User authenticatedUser,
+            HttpServletRequest httpRequest
+    ) {
+        return mediaService.postMedia(authenticatedUser, request, httpRequest);
+    }
+
+    @GetMapping("/private/media/stories/{mediaId}")
+    @MediaControllerDoc.GetMediaDoc
+    public ResponseEntity<GetMediaResponse> getMedia(
+            @PathVariable String mediaId
+    ) {
+        return mediaService.getMedia(mediaId);
     }
 
 }

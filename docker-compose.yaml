@@ -269,7 +269,6 @@ services:
       - MONGO_URI=mongodb://root:rootpassword@mongodb:27017/beunreal?authSource=admin
       - MONGO_DATABASE=beunreal
       - SERVER_PORT=8094
-      - STORAGE_LOCATION=/app/media
     volumes:
       - media_storage:/app/media
     depends_on:
