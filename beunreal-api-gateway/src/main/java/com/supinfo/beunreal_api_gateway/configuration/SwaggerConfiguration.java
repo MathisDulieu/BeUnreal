@@ -26,7 +26,7 @@ public class SwaggerConfiguration {
                                 .url("https://opensource.org/licenses/MIT"))
                         .version("1.0.0"))
                 .addServersItem(new io.swagger.v3.oas.models.servers.Server()
-                        .url("http://localhost:8090")
+                        .url("http://localhost/api")
                         .description("Local Server"))
                 .components(new io.swagger.v3.oas.models.Components()
                         .addSecuritySchemes("bearerAuth",
@@ -36,7 +36,6 @@ public class SwaggerConfiguration {
                                         .bearerFormat("JWT")))
                 .addTagsItem(new Tag().name("Authentication").description("Endpoints for user registration, login, token refresh, and account management"))
                 .addTagsItem(new Tag().name("User").description("Endpoints for managing user profiles, searching for users, and handling friend relationships"))
-                .addTagsItem(new Tag().name("Discovery").description("Endpoints for location-based services, finding nearby users, and discovering content based on geolocation"))
                 .addTagsItem(new Tag().name("Media").description("Endpoints for uploading, downloading, and sharing photos and short videos between users"))
                 .addTagsItem(new Tag().name("Message").description("Endpoints for direct and group messaging, message history, and real-time communication"));
     }
